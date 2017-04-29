@@ -1,17 +1,31 @@
-	this is sample asm
+;;;; sdg
+;;; ok here's the deal
+;;;; sdf
 
-	here's some more
-
+	Q	co	sd	; ooh
+	push	stuff		; sdfs
+	call	stuff		; sdfs
+	
 Hello:
-OOh:	ok i see how this works
-
+OOh:	ok i
 
 	Q "wert"
 	W 123
-	X +23
-	Y -23
-	Z $we
-	G ^dfg
+	X +23		;sdf
+	d		;sdf
+	sdf		; sdfsdf "sdfgdf" (sdfg) [sdg]
+	
+	;; ASM
+	;; asdfsdf
+	;; asfdsdf
+	sadf
+	Y -23	 xcsdfcvx
+	sd sdsdf		;
+	Z $we	; sfsfdg
+	G ^dfg	; sfsdf
+	G [dfg]
+	f f			;
+	
 
 	# sdfg
 	;; sdfgdsfg
