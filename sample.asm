@@ -2,9 +2,32 @@
 ;;; ok here's the deal
 ;;;; sdf
 
-	Q	co	sd	; ooh
+a1:	dq	1, 2, 3
+a2:	dw	1, 2, 3
+a3:	dq	100
+sym:	dw	200
+strn:	db	"wheeeeee", 10, 0
+
+	push	100
+	push	"qwert"
+	push	symbol
+	push	[symbol]
 	push	stuff		; sdfs
+	push	stuff		; sdfs
+	pop
 	call	stuff		; sdfs
+	call	-4
+	jmp	100
+	jne	sdfsdf
+	add	rsp, 10
+	jz	sdfsdf
+	jnz	sdfsdf
+	jnz	[sdfsdf]
+	jnz	+10
+	jne	-20
+	jmp	-50
+	jmp	+50
+	ret
 	
 Hello:
 OOh:	ok i
