@@ -1,11 +1,22 @@
-        global   _main
-	extern   _initscr, _endwin, _getch, _addstr, _noecho, _raw, _nonl
-	extern  _exit, _malloc, _bzero, _atoi, _printf, _printw
+        global _main
+	extern _initscr, _endwin, _getch, _addstr
+	extern _noecho, _raw, _nonl
+	extern _exit, _malloc, _bzero
+	extern _atoi, _printf, _printw
         default  rel
-
         section  .text
 init:
 	push	rbp
+	pop	rax
+	pop	rbx
+	push	r9
+	push	r8
+	push	rcx
+	push	rdx
+	push	rsi
+	push	rdi
+	push	rbx
+	push	rax
 	call	_initscr
 	mov	[scr], rax
 	call	_noecho
@@ -13,6 +24,16 @@ init:
 	call	_nonl
 	lea	rdi,	[hello]
 	call	_addstr
+	pop	rax
+	pop	rbx
+	pop	rdi
+	pop	rsi
+	pop	rdx
+	pop	rcx
+	pop	r8
+	pop	r9
+	push	rbx
+	push	rax
 	pop	rbp
 	ret
 break:
@@ -67,4 +88,5 @@ hello:	db	">> Hello!", 10, 0
 goodbye:db	">> Goodbye!", 10, 0
 format: db      "%g", 10, 0
 fmt: db      "{%d/%c}", 0
-error:  db      "There are no command line arguments to average", 10, 0
+error:  db      "There are no command line"
+	db " arguments to average", 10, 0
