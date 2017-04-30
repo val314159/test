@@ -1,7 +1,7 @@
 LDLIBS=-lcurses
 all: bins z.s runall
-runall: rf ra ; ./av
-bins: average factorial av
+runall: rf ra ; ./ae
+bins: average factorial ae
 factorial: callfactorial.o
 %.s: %.c	; gcc -masm=intel -S $< -o $@
 ra: average	; ./average 54.3 -4 -3 -25 455.1111
