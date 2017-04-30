@@ -1,57 +1,70 @@
-; -----------------------------------------------------------------------------
-; 64-bit program that treats all its command line arguments as integers and
-; displays their average as a floating point number.  This program uses a data
-; section to store intermediate results, not that it has to, but only to
-; illustrate how data sections are used.
-;
-; Designed for OS X.  To assemble and run:
-;
-;     nasm -fmacho64 average.asm && gcc average.o && ./a.out
-; -----------------------------------------------------------------------------
-
         global   _main
-        extern   _atoi
-        extern   _printf
+	extern   _initscr, _endwin, _getch, _addstr, _noecho, _raw, _nonl
+	extern  _exit, _malloc, _bzero, _atoi, _printf, _printw
         default  rel
 
         section  .text
+init:
+	push	rbp
+	call	_initscr
+	mov	[scr], rax
+	call	_noecho
+	call	_raw
+	call	_nonl
+	lea	rdi,	[hello]
+	call	_addstr
+	pop	rbp
+	ret
+break:
+	push	rbp
+	call	_endwin
+	lea	rdi,	[goodbye]
+	mov	rax, 0
+	call	_printf
+	mov	rdi, 0
+	call	_exit
+process:
+	push	rbp
+	mov	rbp,	rsp
+	sub	sp, 16
+
+	mov	rdx,	[c]
+	mov	rsi,	[c]
+	lea	rdi,	[fmt]
+	mov	ax, 0
+	call	_printw
+
+	add	sp, 16
+	pop	rbp
+	ret
+
 _main:
-        push     rbx                    ; we don't ever use this, but it is necesary
-                                        ; to align the stack so we can call stuff
-        dec      rdi                    ; argc-1, since we don't count program name
-        jz       nothingToAverage
-        mov      [count], rdi           ; save number of real arguments
-accumulate:
-        push     rdi                    ; save register across call to atoi
-        push     rsi
-        mov      rdi, [rsi+rdi*8]       ; argv[rdi]
-        call     _atoi                  ; now rax has the int value of arg
-        pop      rsi                    ; restore registers after atoi call
-        pop      rdi
-        add      [sum], rax             ; accumulate sum as we go
-        dec      rdi                    ; count down
-        jnz      accumulate             ; more arguments?
-average:
-        cvtsi2sd xmm0, [sum]
-        cvtsi2sd xmm1, [count]
-        divsd    xmm0, xmm1             ; xmm0 is sum/count
-        lea      rdi, [format]          ; 1st arg to printf
-        mov      rax, 1                 ; printf is varargs, there is 1 non-int argument
-        call     _printf                ; printf(format, sum/count)
-        jmp      done
+	push     rbp
+	mov	rbp,	rsp
 
-nothingToAverage:
-        lea      rdi, [error]
-        xor      rax, rax
-        call     _printf
+	call	init
+loop:
+	call	_getch
+	mov	[c],	rax
 
+	mov	rdi,	rax
+	call	process
+
+	cmp	[c],	byte 113
+	je	done
+
+	cmp	[c],	byte 65
+	jne	loop
 done:
-        pop      rbx                    ; undoes the stupid push at the beginning
-	mov      ax, 0
-        ret
-
+	call	break
+	
         section  .data
-count:  dq       0
-sum:    dq       0
-format: db       "%g", 10, 0
-error:  db       "There are no command line arguments to average", 10, 0
+scr:    dq      0
+c:      dq      0
+count:  dq      0
+sum:    dq      0
+hello:	db	">> Hello!", 10, 0
+goodbye:db	">> Goodbye!", 10, 0
+format: db      "%g", 10, 0
+fmt: db      "{%d/%c}", 0
+error:  db      "There are no command line arguments to average", 10, 0
