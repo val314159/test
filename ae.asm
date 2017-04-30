@@ -1,48 +1,55 @@
-        global _main
+	global _main
 	extern _initscr, _endwin, _getch, _addstr
 	extern _noecho, _raw, _nonl
 	extern _exit, _malloc, _bzero
 	extern _atoi, _printf, _printw
-        default  rel
-        section  .text
+	default rel
+	section .text
 init:
 	push	rbp
+
 	pop	rax
 	pop	rbx
-	push	r9
-	push	r8
-	push	rcx
-	push	rdx
-	push	rsi
 	push	rdi
+	push	rsi
+	push	rdx
+	push	rcx
+	push	r8
+	push	r9
 	push	rbx
 	push	rax
+
 	call	_initscr
+	
 	mov	[scr], rax
 	call	_noecho
+	
 	call	_raw
+	
 	call	_nonl
+
 	lea	rdi,	[hello]
 	call	_addstr
-	pop	rax
-	pop	rbx
-	pop	rdi
-	pop	rsi
-	pop	rdx
+
 	pop	rcx
-	pop	r8
+	pop	rdx
 	pop	r9
-	push	rbx
-	push	rax
+	pop	r8
+	add	sp,	16
+	pop	rsi
+	pop	rdi
+	push	rdx
+	push	rcx
+
 	pop	rbp
 	ret
 break:
 	push	rbp
 	call	_endwin
 	lea	rdi,	[goodbye]
-	mov	rax, 0
+	mov	rax,	0
 	call	_printf
-	mov	rdi, 0
+	mov	rdi,	0
 	call	_exit
 process:
 	push	rbp
@@ -52,15 +59,15 @@ process:
 	mov	rdx,	[c]
 	mov	rsi,	[c]
 	lea	rdi,	[fmt]
-	mov	ax, 0
+	mov	ax,	0
 	call	_printw
 
-	add	sp, 16
+	add	sp,	16
 	pop	rbp
 	ret
 
 _main:
-	push     rbp
+	push	rbp
 	mov	rbp,	rsp
 
 	call	init
@@ -78,15 +85,15 @@ loop:
 	jne	loop
 done:
 	call	break
-	
-        section  .data
-scr:    dq      0
-c:      dq      0
-count:  dq      0
-sum:    dq      0
+
+	section  .data
+scr:	dq      0
+c:	dq      0
+count:	dq      0
+sum:	dq      0
 hello:	db	">> Hello!", 10, 0
 goodbye:db	">> Goodbye!", 10, 0
 format: db      "%g", 10, 0
-fmt: db      "{%d/%c}", 0
-error:  db      "There are no command line"
+fmt:	db      "{%d/%c}", 0
+error:	db      "There are no command line"
 	db " arguments to average", 10, 0
