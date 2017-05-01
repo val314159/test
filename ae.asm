@@ -6,7 +6,7 @@ extern _exit, _malloc, _bzero
 extern _atoi, _printf, _printw
 
 init:
-	start "x"
+	startx 2*8
 	
 	callf	_initscr
 	
@@ -20,19 +20,23 @@ init:
 	lea	rdi,	[hello]
 	callf	_addstr
 
-	finish "y"
+	finishx
 
 break:
-	start "x"
+	startx 2*8
+
 	callf	_endwin
+
 	lea	rdi,	[goodbye]
 	callf	_printf
+
 	mov	rdi,	0
 	callf	_exit
-	finish "y"
+
+	finishx
 
 process:
-	start "x"
+	startx 2*8
 
 	mov	rdx,	[c]
 	mov	rsi,	[c]
@@ -40,10 +44,10 @@ process:
 	mov	ax,	0
 	callf	_printw
 
-	finish "y"
+	finishx
 
 _main:
-	start "x"
+	startx 2*8
 
 	callf	init
 loop:
@@ -53,13 +57,13 @@ loop:
 	mov	rdi,	rax
 	callf	process
 
-	cmp2 [c], byte 113, je, done
-	cmp2 [c], byte 65, je, done
+	cmp2	[c], byte 113, je, done
+	cmp2	[c], byte  65, je, done
 	
 	jmp	loop
 done:
 	callf	break
-	finish "y"
+	finishx
 
 section  .data
 scr:	dq      0

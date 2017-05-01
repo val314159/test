@@ -1,17 +1,22 @@
-%define RV1 rax
-%define RV2 rbx
-%define RV3 rcx
-%define RV4 rdx
-%define A1 [rbp+0]
-%define A2 [rbp+8]
-%define A3 [rbp+16]
-%define A4 [rbp+24]
-%define A5 [rbp+32]
-%define A6 [rbp+40]
-%define XP [rbp+48]
-%define YP [rbp+56]
-%define A7 [rbp+64]
-%define A8 [rbp+72]
+%define A7  [rbp+9*8]
+%define A6  [rbp+8*8]
+%define OIP [rbp+7*8]
+%define OBP [rbp+6*8]
+%define A5  [rbp+5*8]
+%define A4  [rbp+4*8]
+%define A3  [rbp+3*8]
+%define A2  [rbp+2*8]
+%define A1  [rbp+1*8]
+%define A0  [rbp-0*8]
+%define L1  [rbp-1*8]
+%define L2  [rbp-2*8]
+%define L3  [rbp-3*8]
+%define L4  [rbp-4*8]
+%define L5  [rbp-5*8]
+%define L6  [rbp-6*8]
+%define L7  [rbp-7*8]
+%define L8  [rbp-8*8]
+%define L9  [rbp-9*8]
 
 %macro callf 1
 	xor	rax,	rax
@@ -23,32 +28,21 @@
 	%3	%4
 %endmacro
 	
-%macro start 1
+%macro startx 1
 	push	rbp
-
-	pop	rax
-	pop	rbx
-	push	rdi
-	push	rsi
-	push	rdx
-	push	rcx
-	push	r8
 	push	r9
-	push	rbx
-	push	rax
-%endmacro
-
-%macro finish 1
-	pop	rcx
-	pop	rdx
-	pop	r9
-	pop	r8
-	add	sp,	16
-	pop	rsi
-	pop	rdi
-	push	rdx
+	push	r8
 	push	rcx
-
+	push	rdx
+	push	rsi
+	push	rdi
+	mov	rbp,	rsp
+	sub	rsp,	%1
+%endmacro
+	
+%macro finishx 0
+	mov	rsp,	rbp
+	add	rsp,	6*8
 	pop	rbp
 	ret
 %endmacro
